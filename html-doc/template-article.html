@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文章标题 — 系列名</title>
+<style>
+/* AI Engineering Practice — 文章模板样式 v1 */
+/* 阿远出品 · 2026-05-31 */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; background: #fafafa; color: #1a1a1a; line-height: 1.9; }
+
+/* === 侧边栏 === */
+.sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100vh; background: #fff; border-right: 1px solid #eee; overflow-y: auto; z-index: 100; padding: 32px 0 40px; transition: transform .25s ease; }
+.sidebar-title { font-size: 13px; font-weight: 800; color: #0D7A5F; letter-spacing: 1px; padding: 0 24px; margin-bottom: 4px; }
+.sidebar-book { font-size: 15px; font-weight: 700; color: #111; padding: 0 24px; margin-bottom: 24px; line-height: 1.5; }
+.sidebar-list { list-style: none; padding: 0; }
+.sidebar-list li { border-left: 3px solid transparent; }
+.sidebar-list li a { display: flex; align-items: center; gap: 10px; padding: 10px 24px; text-decoration: none; color: #666; font-size: 14px; line-height: 1.5; transition: all .15s; }
+.sidebar-list li a:hover { background: #f0fdf4; color: #333; }
+.sidebar-list li.active { border-left-color: #0D7A5F; background: #f0fdf4; }
+.sidebar-list li.active a { color: #0D7A5F; font-weight: 700; }
+.sidebar-list .ch-num { width: 24px; height: 24px; border-radius: 50%; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #e5e7eb; color: #999; }
+.sidebar-list li.active .ch-num { background: #0D7A5F; color: #fff; }
+.sidebar-list li.done .ch-num { background: #22c55e; color: #fff; }
+.sidebar-list li.done a { color: #333; }
+.sidebar-footer { padding: 20px 24px 0; border-top: 1px solid #f0f0f0; margin-top: 20px; font-size: 12px; color: #bbb; line-height: 1.6; }
+
+/* === 移动端菜单 === */
+.menu-btn { display: none; position: fixed; top: 16px; left: 16px; z-index: 200; width: 40px; height: 40px; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; cursor: pointer; font-size: 18px; color: #333; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 90; }
+
+/* === 正文区 === */
+.main { margin-left: 260px; padding: 32px 0 40px 0; }
+.container { max-width: 100%; margin: 0; padding: 0 50px; }
+
+/* === 响应式 === */
+@media (max-width: 860px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,.1); }
+  .overlay.open { display: block; }
+  .menu-btn { display: flex; }
+  .main { margin-left: 0; padding: 40px 16px 32px; }
+}
+
+/* === 元信息 === */
+.meta { font-size: 13px; color: #999; margin-bottom: 20px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.tag { background: #f0f0f0; border-radius: 4px; padding: 2px 8px; font-size: 12px; color: #666; }
+.chapter-label { font-size: 13px; font-weight: 700; color: #0D7A5F; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+
+/* === 标题 === */
+h1 { font-size: 30px; font-weight: 800; line-height: 1.4; margin-bottom: 12px; color: #111; }
+.subtitle { font-size: 16px; color: #888; margin-bottom: 12px; font-style: italic; }
+h2 { font-size: 21px; font-weight: 700; margin: 52px 0 16px; color: #111; }
+h3 { font-size: 16px; font-weight: 700; margin: 28px 0 10px; color: #333; }
+p { font-size: 16px; margin-bottom: 16px; color: #333; }
+hr { border: none; border-top: 1px solid #eee; margin: 28px 0; }
+
+/* === 内容组件 === */
+.insight { background: #fffbf0; border: 1px solid #ffe082; border-radius: 8px; padding: 16px 20px; margin: 24px 0; font-size: 15px; color: #7a5800; }
+.insight strong { color: #b37800; }
+
+.dialogue { background: #f7f7f7; border-radius: 12px; padding: 24px 28px; margin: 28px 0; border-left: 4px solid #111; }
+.dialogue-line { display: flex; gap: 12px; margin-bottom: 16px; align-items: flex-start; }
+.dialogue-line:last-child { margin-bottom: 0; }
+.speaker { font-size: 12px; font-weight: 700; color: #fff; background: #111; border-radius: 4px; padding: 2px 8px; white-space: nowrap; margin-top: 2px; flex-shrink: 0; }
+.speaker.ayuan { background: #6366f1; }
+.speaker.cc { background: #22c55e; }
+.speaker.xx { background: #3b82f6; }
+.dialogue-text { font-size: 15px; color: #444; line-height: 1.7; }
+
+.scene { background: #f0f4ff; border-radius: 12px; padding: 24px 28px; margin: 28px 0; border-left: 4px solid #0D7A5F; }
+.scene-title { font-size: 13px; font-weight: 700; color: #0D7A5F; letter-spacing: 1px; margin-bottom: 8px; }
+.scene p { color: #333; margin-bottom: 10px; }
+.scene p:last-child { margin-bottom: 0; }
+
+.pull-quote { text-align: center; font-size: 20px; font-weight: 700; color: #111; margin: 48px 0; line-height: 1.6; padding: 0 20px; }
+.pull-quote .accent { color: #0D7A5F; }
+
+.danger-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 24px 28px; margin: 28px 0; border-left: 4px solid #ef4444; }
+.danger-box .danger-title { font-size: 13px; font-weight: 700; color: #dc2626; letter-spacing: 1px; margin-bottom: 8px; }
+.danger-box p { color: #991b1b; margin-bottom: 10px; }
+.danger-box p:last-child { margin-bottom: 0; }
+
+code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 14px; color: #0D7A5F; font-family: "SF Mono", "Fira Code", monospace; }
+
+/* === SVG 图说明 === */
+.svg-placeholder { background: #f8fafb; border: 2px dashed #d1d5db; border-radius: 12px; padding: 20px; margin: 28px 0; text-align: center; }
+.svg-placeholder p { color: #6b7280; font-size: 13px; margin: 8px 0 0; }
+
+/* === 底部导航 === */
+.chapter-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 64px; padding-top: 32px; border-top: 1px solid #eee; }
+.chapter-nav a { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: #0D7A5F; text-decoration: none; font-weight: 600; padding: 10px 20px; border-radius: 8px; border: 1px solid #e5e7eb; transition: all .15s; }
+.chapter-nav a:hover { background: #f0fdf4; border-color: #86efac; }
+
+.footer { text-align: center; font-size: 13px; color: #bbb; margin-top: 64px; }
+
+</style>
+</head>
+<body>
+
+<button class="menu-btn" id="menuBtn">☰</button>
+<div class="overlay" id="overlay"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">系列大标题（英文全大写）</div>
+  <div class="sidebar-book">系列副标题</div>
+  <ul class="sidebar-list">
+    <li class="done"><a href="chapter1.html"><span class="ch-num">1</span>章节1标题</a></li>
+    <li class="active"><a href="#"><span class="ch-num">2</span>本章标题</a></li>
+    <li><a href="#"><span class="ch-num">3</span>章节3标题</a></li>
+  </ul>
+  <div class="sidebar-footer">
+    作者 × AI 出品<br>最后更新：2026-06-22
+  </div>
+</nav>
+
+<div class="main">
+  <div class="container">
+    <div class="chapter-label">CHAPTER 02</div>
+    <h1>文章标题</h1>
+    <p class="subtitle">副标题一句话</p>
+    <div class="meta">
+      <span>2026-06-22</span>
+      <span class="tag">标签</span>
+    </div>
+
+    <p>正文内容从这里开始……</p>
+
+    <div class="insight">
+      <strong>洞察：</strong>关键洞察内容放这里。
+    </div>
+
+    <h2>第一节</h2>
+    <p>内容……</p>
+
+    <div class="dialogue">
+      <div class="dialogue-line">
+        <span class="speaker">用户</span>
+        <span class="dialogue-text">用户说的话</span>
+      </div>
+      <div class="dialogue-line">
+        <span class="speaker ayuan">我</span>
+        <span class="dialogue-text">我的回应</span>
+      </div>
+    </div>
+
+    <div class="chapter-nav">
+      <a href="chapter1.html">← 上一篇</a>
+      <a href="chapter3.html">下一篇 →</a>
+    </div>
+    <div class="footer">作者 × AI 出品</div>
+  </div>
+</div>
+
+<script>
+/* 侧边栏移动端菜单交互 */
+(function() {
+  var btn = document.getElementById('menuBtn');
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('overlay');
+  if (!btn || !sidebar || !overlay) return;
+  btn.addEventListener('click', function() {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+  });
+  overlay.addEventListener('click', function() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  });
+})();
+
+</script>
+<script src="annotations-local.js"></script>
+</body>
+</html>
